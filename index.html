@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<script>
+/* 카카오톡·네이버·페이스북·인스타그램 등 인앱 브라우저에서 열리면 기본 브라우저로 다시 열기 */
+(function () {
+  var ua = navigator.userAgent || '';
+  var url = location.href;
+  var inApp = /KAKAOTALK|NAVER\(inapp|FBAN|FBAV|FB_IAB|Instagram|Line\/|DaumApps|everytimeApp|wv\)/i.test(ua);
+  if (/KAKAOTALK/i.test(ua)) { location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(url); return; }
+  if (/Line\//i.test(ua) && url.indexOf('openExternalBrowser=1') < 0) {
+    location.href = url + (url.indexOf('?') < 0 ? '?' : '&') + 'openExternalBrowser=1'; return;
+  }
+  if (!inApp) return;
+  if (/Android/i.test(ua)) {
+    location.href = 'intent://' + url.replace(/^https?:\/\//, '') + '#Intent;scheme=https;package=com.android.chrome;end'; return;
+  }
+  // iOS 인앱 브라우저는 사파리로 강제 이동이 불가 → 안내 화면
+  document.addEventListener('DOMContentLoaded', function () {
+    var box = document.createElement('div');
+    box.setAttribute('role', 'dialog');
+    box.style.cssText = 'position:fixed;inset:0;z-index:99;background:rgba(29,43,44,.95);color:#eef1ee;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center;font:15px/1.6 system-ui,sans-serif';
+    box.innerHTML = '<strong style="font-size:18px">사파리에서 열어 주세요</strong>' +
+      '<span>이 앱 안의 브라우저에서는 작품이 제대로 작동하지 않을 수 있어요.<br>⋯ 메뉴에서 <b>Safari로 열기</b>를 눌러 주세요.</span>' +
+      '<button id="copyUrl" style="font:inherit;padding:10px 18px;border-radius:999px;border:0;background:#eef1ee;color:#1d2b2c">주소 복사</button>' +
+      '<button id="stayHere" style="font:inherit;background:none;border:0;color:#a9b8b6;text-decoration:underline">그냥 여기서 보기</button>';
+    document.body.appendChild(box);
+    document.getElementById('copyUrl').onclick = function () {
+      var b = this;
+      (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(
+        function () { b.textContent = '복사했어요'; }, function () { prompt('주소를 복사하세요', url); });
+    };
+    document.getElementById('stayHere').onclick = function () { box.remove(); };
+  });
+})();
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>지혜의 작업실</title>
+<meta name="description" content="교실 전자칠판에서 아이들과 쓰는 한글·수학 도구부터, 손에 들고 기울이며 감상하는 빛과 무늬의 작품까지. 지혜가 만든 웹 작품 모음입니다.">
+<meta property="og:title" content="지혜의 작업실">
+<meta property="og:description" content="한글·수학 수업 도구, 빛과 무늬, 소리와 음악, 지도, 공부 퀴즈 — 31개의 웹 작품 모음">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jihye84.github.io/">
+<meta name="theme-color" content="#eef1ee">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&family=Spectral:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #eef1ee;
+  --paper-2: #f7f9f6;
+  --ink: #1d2b2c;
+  --ink-2: #4f5f5e;
+  --line: rgba(29, 43, 44, .16);
+  --accent: #2f5d8a;
+  --accent-ink: #fff;
+  --serif: 'Gowun Batang', 'Nanum Myeongjo', serif;
+  --sans: 'Gowun Dodum', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+  --gap: 12px;
+  color-scheme: light;
+}
+/* 영어 화면: 제목은 라틴 세리프로 */
+html[lang="en"] { --serif: 'Spectral', 'Gowun Batang', Georgia, serif; }
+html[lang="en"] .side h1 { letter-spacing: -.02em; }
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font: 15px/1.6 var(--sans);
+  overflow: hidden;
+  -webkit-text-size-adjust: 100%;
+  word-break: keep-all;
+}
+button { font: inherit; color: inherit; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.app {
+  height: 100vh; height: 100dvh;
+  display: grid;
+  grid-template-columns: minmax(300px, 34%) 1fr;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* ── 왼쪽: 이름과 색동 서랍 ── */
+.side {
+  display: flex; flex-direction: column;
+  min-height: 0;
+  padding: clamp(20px, 4vh, 44px) 0 clamp(16px, 3vh, 28px) clamp(20px, 3vw, 44px);
+}
+.side { position: relative; }
+.lang {
+  position: absolute; top: clamp(20px, 4vh, 44px); right: 28px;
+  display: flex; border: 1px solid var(--line); border-radius: 99px; overflow: hidden;
+  background: var(--paper-2);
+}
+.lang button {
+  border: 0; background: transparent; cursor: pointer;
+  min-width: 44px; min-height: 34px; padding: 0 12px; font-size: 13.5px; color: var(--ink-2);
+}
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.side h1 { padding-right: 104px;
+  font: 700 clamp(30px, 3.4vw, 48px)/1.15 var(--serif);
+  margin: 0;
+  letter-spacing: -.01em;
+}
+.side .who {
+  margin: 10px 28px 0 0;
+  color: var(--ink-2);
+  max-width: 30em;
+  font-size: 14.5px;
+}
+.bands {
+  flex: 1; min-height: 0;
+  display: flex; flex-direction: column;
+  margin: clamp(16px, 3.5vh, 36px) 0 clamp(12px, 2.5vh, 24px);
+}
+.band {
+  flex: 1; min-height: 34px; max-height: 92px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  border: 0; margin: 0 28px 0 0;
+  padding: 0 18px 0 20px;
+  background: var(--c);
+  color: var(--t);
+  cursor: pointer;
+  text-align: left;
+  transition: margin-right .28s cubic-bezier(.3,.7,.2,1), filter .2s;
+}
+.band:first-child { border-top-left-radius: 10px; }
+.band:last-child { border-bottom-left-radius: 10px; }
+.band .bn { font: 700 clamp(17px, 1.6vw, 22px)/1.2 var(--serif); }
+.band .bc { font-size: 13px; opacity: .85; }
+.band:hover { filter: brightness(1.06); }
+.band[aria-pressed="true"] { margin-right: 0; }
+.band[aria-pressed="false"] .bn { opacity: .92; }
+.side footer {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  font-size: 13px; color: var(--ink-2);
+  padding-right: 28px;
+}
+.side footer a { text-decoration-color: var(--line); text-underline-offset: 3px; }
+
+/* ── 오른쪽: 서랍 속 작품 ── */
+.shelf {
+  min-height: 0; min-width: 0;
+  display: flex; flex-direction: column;
+  background: var(--paper-2);
+  border-left: 8px solid var(--accent);
+  padding: clamp(20px, 4vh, 44px) clamp(20px, 3.4vw, 52px) clamp(14px, 2.6vh, 26px);
+  transition: border-color .28s;
+}
+.shelf-head { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.shelf h2 {
+  margin: 0;
+  font: 700 clamp(24px, 2.6vw, 34px)/1.2 var(--serif);
+  color: var(--accent-text, var(--accent));
+}
+.shelf .count { color: var(--ink-2); font-size: 14px; }
+.shelf .intro {
+  margin: 8px 0 0;
+  max-width: 44em;
+  color: var(--ink-2);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.grid-wrap { flex: 1; min-height: 0; margin-top: clamp(14px, 2.6vh, 26px); position: relative; touch-action: pan-y; }
+.grid {
+  position: absolute; inset: 0;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+  grid-auto-rows: var(--card-h, 120px);
+  align-content: start;
+}
+.card {
+  display: flex; flex-direction: column; justify-content: center; gap: 4px;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper-2);
+  padding: 12px 16px 12px 18px;
+  cursor: pointer;
+  position: relative; overflow: hidden;
+  min-width: 0;
+}
+.card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: var(--accent);
+}
+.card:hover { background: #fff; border-color: rgba(29,43,44,.28); }
+.card .ct { font: 700 17px/1.3 var(--serif); }
+.card .cl {
+  color: var(--ink-2); font-size: 14px; line-height: 1.45;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.card .tg { display: flex; gap: 6px; flex-wrap: nowrap; overflow: hidden; margin-top: 2px; }
+.tag {
+  font-size: 12px; line-height: 1;
+  padding: 5px 8px 4px; border-radius: 99px;
+  background: rgba(29,43,44,.06); color: var(--ink-2);
+  white-space: nowrap;
+}
+.compact .card .tg { display: none; }
+.tight .card .cl { -webkit-line-clamp: 1; }
+
+.pager {
+  display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+  margin-top: 12px; min-height: 40px;
+}
+.pager[hidden] { display: flex; visibility: hidden; }
+.pager button {
+  border: 1px solid var(--line); background: var(--paper-2);
+  border-radius: 99px; padding: 7px 16px; cursor: pointer;
+}
+.pager button:disabled { opacity: .35; cursor: default; }
+.pager .pn { font-size: 14px; color: var(--ink-2); min-width: 3.5em; text-align: center; }
+
+/* ── 작품 소개 서랍 ── */
+.sheet-bg {
+  position: fixed; inset: 0; z-index: 10;
+  background: rgba(29,43,44,.38);
+  opacity: 0; pointer-events: none; transition: opacity .22s;
+}
+.sheet {
+  position: fixed; z-index: 11;
+  right: 0; top: 0; bottom: 0;
+  width: min(520px, 100%);
+  background: var(--paper-2);
+  border-left: 8px solid var(--accent);
+  display: flex; flex-direction: column;
+  padding: clamp(22px, 4.5vh, 48px) clamp(22px, 3vw, 40px) clamp(18px, 3vh, 32px);
+  transform: translateX(105%); transition: transform .3s cubic-bezier(.3,.7,.2,1);
+  visibility: hidden;
+}
+.open .sheet-bg { opacity: 1; pointer-events: auto; }
+.open .sheet { transform: none; visibility: visible; }
+.sheet .sk { color: var(--accent-text, var(--accent)); font-size: 14px; font-weight: 700; }
+.sheet h3 { margin: 6px 0 4px; font: 700 clamp(24px, 3vw, 32px)/1.25 var(--serif); }
+.sheet .sl { margin: 0; color: var(--ink-2); }
+.sheet .sb {
+  flex: 1; min-height: 0; overflow: auto;
+  margin: 18px 0 0; font-size: 15.5px; line-height: 1.75;
+  max-width: 34em;
+}
+.sheet .st { display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0 18px; }
+.sheet .acts { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 46px; padding: 0 22px; border-radius: 99px;
+  text-decoration: none; font-weight: 700;
+  border: 1px solid var(--line); background: transparent;
+}
+.btn.main { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+.close {
+  position: absolute; top: 12px; right: 12px;
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 0; background: transparent; cursor: pointer; font-size: 26px; line-height: 1;
+  color: var(--ink-2);
+}
+
+/* ── 좁은 화면(휴대폰 세로) ── */
+@media (max-width: 859px) {
+  .app { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .side { padding: 16px 16px 0; }
+  .side h1 { font-size: 26px; }
+  .lang { top: 14px; right: 16px; }
+  .lang button { min-height: 32px; min-width: 42px; }
+  .side .who { margin: 4px 0 0; font-size: 13.5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .side footer { display: none; }
+  .bands { flex-direction: row; margin: 12px -16px 0; flex: none; }
+  .band {
+    margin: 0; padding: 8px 2px 10px;
+    min-height: 0; max-height: none; height: 54px;
+    flex-direction: column; justify-content: center; gap: 0;
+    text-align: center;
+    border-radius: 0 !important;
+    transition: height .25s, padding .25s;
+  }
+  .band .bn { font-size: 13.5px; line-height: 1.2; }
+  .band .bc { display: none; }
+  .band[aria-pressed="true"] { height: 64px; margin: 0; }
+  .band[aria-pressed="false"] { margin-top: 10px; }
+  .shelf { border-left: 0; border-top: 0; padding: 14px 16px 10px; }
+  .shelf h2 { font-size: 22px; }
+  .shelf .intro { font-size: 14px; -webkit-line-clamp: 2; margin-top: 4px; }
+  .grid-wrap { margin-top: 12px; }
+  .card { padding: 10px 14px 10px 16px; }
+  .card .ct { font-size: 16px; }
+  .card .cl { font-size: 13.5px; }
+  .pager { justify-content: space-between; margin-top: 10px; }
+  .sheet {
+    top: auto; left: 0; right: 0; width: 100%;
+    max-height: 88dvh;
+    border-left: 0; border-top: 8px solid var(--accent);
+    border-radius: 16px 16px 0 0;
+    padding: 22px 20px calc(18px + env(safe-area-inset-bottom));
+    transform: translateY(105%);
+  }
+  .sheet .sb { font-size: 15px; line-height: 1.7; }
+  .sheet .acts .btn { flex: 1; }
+}
+@media (max-width: 859px) and (max-height: 600px) {
+  .side .who, .shelf .intro { display: none; }
+}
+@media (min-width: 860px) and (max-height: 620px) {
+  .side .who { display: none; }
+  .shelf .intro { -webkit-line-clamp: 2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <aside class="side">
+    <div class="lang" role="group" aria-label="언어 / Language"><button type="button" data-l="ko" lang="ko">한</button><button type="button" data-l="en" lang="en">EN</button></div>
+    <h1 id="hTitle">지혜의 작업실</h1>
+    <p class="who" id="hWho">초등학교 선생님 지혜가 만든 웹 작품들이에요. 교실 전자칠판에서 아이들과 쓰는 수업 도구부터, 손에 들고 기울이며 감상하는 작은 작품까지 여섯 서랍에 나누어 담았습니다.</p>
+    <nav class="bands" id="bands" aria-label="작품 분야"></nav>
+    <footer>
+      <span id="total"></span>
+      <a href="https://github.com/jihye84" id="ghLink">깃헙에서 보기</a>
+    </footer>
+  </aside>
+
+  <main class="shelf" id="shelf">
+    <div class="shelf-head">
+      <h2 id="shelfName"></h2>
+      <span class="count" id="shelfCount"></span>
+    </div>
+    <p class="intro" id="shelfIntro"></p>
+    <div class="grid-wrap" id="gridWrap">
+      <div class="grid" id="grid"></div>
+    </div>
+    <div class="pager" id="pager">
+      <button id="prev" type="button">이전</button>
+      <span class="pn" id="pn" aria-live="polite"></span>
+      <button id="next" type="button">다음</button>
+    </div>
+  </main>
+</div>
+
+<div class="sheet-bg" id="sheetBg"></div>
+<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sTitle" aria-hidden="true">
+  <button class="close" id="sClose" type="button" aria-label="닫기">×</button>
+  <div class="sk" id="sKind"></div>
+  <h3 id="sTitle"></h3>
+  <p class="sl" id="sLine"></p>
+  <p class="sb" id="sBody"></p>
+  <div class="st" id="sTags"></div>
+  <div class="acts" id="sActs"></div>
+</section>
+
+<script src="works.js"></script>
+<script>
+(function () {
+  var SH = window.SHELVES;
+  var BASE = 'https://jihye84.github.io/';
+  var GH = 'https://github.com/jihye84/';
+  var $ = function (id) { return document.getElementById(id); };
+  var app = $('app'), bands = $('bands'), grid = $('grid'), wrap = $('gridWrap');
+  var cur = 0, page = 0, perPage = 4, lastFocus = null;
+
+  // ── 언어: 저장된 선택 > 주소의 ?lang= > 브라우저 언어 ──
+  var UI = {
+    ko: { doc: '지혜의 작업실', title: '지혜의 작업실',
+      who: '초등학교 선생님 지혜가 만든 웹 작품들이에요. 교실 전자칠판에서 아이들과 쓰는 수업 도구부터, 손에 들고 기울이며 감상하는 작은 작품까지 여섯 서랍에 나누어 담았습니다.',
+      total: function (n) { return '작품 ' + n + '개'; }, count: function (n) { return n + '개'; },
+      gh: '깃헙에서 보기', prev: '이전', next: '다음', open: '작품 열기', code: '코드 보기',
+      also: function (l) { return l + ' 열기'; }, close: '닫기', nav: '작품 분야' },
+    en: { doc: 'Jihye\u2019s Workshop', title: 'Jihye\u2019s Workshop',
+      who: 'Web works made by Jihye, an elementary school teacher in Korea \u2014 from tools her first graders use on the classroom smart board to small pieces you hold in your hand and tilt to watch, sorted into six drawers.',
+      total: function (n) { return n + ' works'; }, count: function (n) { return n + (n === 1 ? ' work' : ' works'); },
+      gh: 'View on GitHub', prev: 'Previous', next: 'Next', open: 'Open', code: 'View code',
+      also: function (l) { return 'Open ' + l; }, close: 'Close', nav: 'Fields of work' }
+  };
+  var lang = 'ko';
+  try { lang = localStorage.getItem('lang') || ''; } catch (e) { lang = ''; }
+  var qs = (location.search.match(/[?&]lang=(ko|en)/) || [])[1];
+  if (qs) lang = qs;
+  if (lang !== 'ko' && lang !== 'en') lang = /^ko/i.test(navigator.language || 'ko') ? 'ko' : 'en';
+  function T() { return UI[lang]; }
+  function L(o) { return (lang === 'en' && o.en) ? o.en : o; }   // 분야·작품의 해당 언어 글
+  function applyLang() {
+    var t = T();
+    document.documentElement.lang = lang;
+    document.title = t.doc;
+    $('hTitle').textContent = t.title;
+    $('hWho').textContent = t.who;
+    $('total').textContent = t.total(total);
+    $('ghLink').textContent = t.gh;
+    $('prev').textContent = t.prev; $('next').textContent = t.next;
+    $('sClose').setAttribute('aria-label', t.close);
+    bands.setAttribute('aria-label', t.nav);
+    [].forEach.call(document.querySelectorAll('.lang button'), function (b) { b.setAttribute('aria-pressed', b.dataset.l === lang ? 'true' : 'false'); });
+    [].forEach.call(bands.children, function (b, i) { b.querySelector('.bn').textContent = L(SH[i]).name; });
+  }
+  [].forEach.call(document.querySelectorAll('.lang button'), function (b) {
+    b.onclick = function () {
+      lang = b.dataset.l;
+      try { localStorage.setItem('lang', lang); } catch (e) {}
+      try { var u = new URL(location.href); u.searchParams.set('lang', lang); history.replaceState(null, '', u); } catch (e) {}
+      closeSheet(); applyLang(); choose(cur, true);
+    };
+  });
+
+  // 글자색: 밝은 띠(노랑)에는 진한 글씨
+  function textOn(hex) {
+    var n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+    return (0.299 * r + 0.587 * g + 0.114 * b) > 150 ? '#1d2b2c' : '#ffffff';
+  }
+  function darken(hex) { // 밝은 색은 제목용으로 조금 어둡게
+    if (textOn(hex) === '#ffffff') return hex;
+    var n = parseInt(hex.slice(1), 16);
+    var f = function (v) { return Math.round(v * .72).toString(16).padStart(2, '0'); };
+    return '#' + f(n >> 16) + f((n >> 8) & 255) + f(n & 255);
+  }
+
+  var total = SH.reduce(function (s, x) { return s + x.works.length; }, 0);
+
+  SH.forEach(function (s, i) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'band';
+    b.style.setProperty('--c', s.color);
+    b.style.setProperty('--t', textOn(s.color));
+    b.innerHTML = '<span class="bn">' + s.name + '</span><span class="bc">' + s.works.length + '</span>';
+    b.onclick = function () { choose(i); };
+    bands.appendChild(b);
+  });
+
+  function setAccent(s) {
+    var r = document.documentElement.style;
+    r.setProperty('--accent', s.color);
+    r.setProperty('--accent-ink', textOn(s.color));
+    r.setProperty('--accent-text', darken(s.color));
+  }
+
+  function choose(i, keepPage) {
+    cur = i; if (!keepPage) page = 0;
+    var s = SH[i];
+    setAccent(s);
+    [].forEach.call(bands.children, function (b, k) { b.setAttribute('aria-pressed', k === i ? 'true' : 'false'); });
+    var ls = L(s);
+    $('shelfName').textContent = ls.name;
+    $('shelfCount').textContent = T().count(s.works.length);
+    $('shelfIntro').textContent = ls.intro;
+    try { history.replaceState(null, '', location.pathname + location.search + '#' + s.id); } catch (e) {}
+    layout();
+  }
+
+  // 화면 크기에 맞춰 한 장에 들어갈 카드 수 계산(스크롤 없음)
+  function layout() {
+    var w = wrap.clientWidth, h = wrap.clientHeight;
+    var narrow = window.innerWidth < 860;
+    var gap = 12;
+    var cols = narrow ? (w > 560 ? 2 : 1) : Math.max(1, Math.min(3, Math.floor((w + gap) / 300)));
+    var cardH = narrow ? 104 : 124;
+    grid.classList.remove('compact', 'tight');
+    if (h < cardH * 2 + gap) { cardH = Math.max(64, Math.min(cardH, h)); }
+    var rows = Math.max(1, Math.floor((h + gap) / (cardH + gap)));
+    if (rows < 2 && h >= 72 * 2 + gap) rows = 2; // 낮은 화면에서는 작은 카드 두 줄
+    // 남는 높이를 카드에 나눠 주되 너무 커지지 않게
+    var fit = Math.floor((h - gap * (rows - 1)) / rows);
+    cardH = Math.min(fit, narrow ? 120 : 150);
+    if (cardH < 96) grid.classList.add('compact');
+    if (cardH < 76) grid.classList.add('tight');
+    grid.style.setProperty('--cols', cols);
+    grid.style.setProperty('--card-h', cardH + 'px');
+    perPage = cols * rows;
+    render();
+  }
+
+  function render() {
+    var s = SH[cur], list = s.works;
+    var pages = Math.max(1, Math.ceil(list.length / perPage));
+    if (page > pages - 1) page = pages - 1;
+    grid.innerHTML = '';
+    list.slice(page * perPage, page * perPage + perPage).forEach(function (w) {
+      var c = document.createElement('button');
+      c.type = 'button'; c.className = 'card';
+      c.innerHTML = '<span class="ct"></span><span class="cl"></span><span class="tg"></span>';
+      var lw = L(w);
+      c.querySelector('.ct').textContent = lw.title;
+      c.querySelector('.cl').textContent = lw.line;
+      var tg = c.querySelector('.tg');
+      lw.tags.forEach(function (t) { var e = document.createElement('span'); e.className = 'tag'; e.textContent = t; tg.appendChild(e); });
+      c.onclick = function () { openSheet(w, s, c); };
+      grid.appendChild(c);
+    });
+    $('pager').hidden = pages < 2;
+    $('pn').textContent = (page + 1) + ' / ' + pages;
+    $('prev').disabled = page === 0;
+    $('next').disabled = page >= pages - 1;
+  }
+  function go(d) {
+    var pages = Math.ceil(SH[cur].works.length / perPage);
+    var np = page + d;
+    if (np < 0 || np >= pages) return false;
+    page = np; render(); return true;
+  }
+  $('prev').onclick = function () { go(-1); };
+  $('next').onclick = function () { go(1); };
+
+  // 밀어서 넘기기: 좌우는 쪽, 끝에서 더 밀면 다음 서랍
+  var sx = 0, sy = 0;
+  wrap.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  wrap.addEventListener('touchend', function (e) {
+    var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.3) return;
+    var d = dx < 0 ? 1 : -1;
+    if (!go(d)) {
+      var ni = cur + d;
+      if (ni >= 0 && ni < SH.length) {
+        choose(ni);
+        if (d < 0) { page = 999; render(); }
+      }
+    }
+  }, { passive: true });
+
+  function openSheet(w, s, from) {
+    lastFocus = from;
+    var lw = L(w), t = T();
+    $('sKind').textContent = L(s).name;
+    $('sTitle').textContent = lw.title;
+    $('sLine').textContent = lw.line;
+    $('sBody').textContent = lw.body;
+    var st = $('sTags'); st.innerHTML = '';
+    lw.tags.forEach(function (t) { var e = document.createElement('span'); e.className = 'tag'; e.textContent = t; st.appendChild(e); });
+    var a = $('sActs'); a.innerHTML = '';
+    function link(href, text, main) {
+      var l = document.createElement('a'); l.href = href; l.className = 'btn' + (main ? ' main' : '');
+      l.textContent = text; a.appendChild(l);
+    }
+    link(BASE + w.repo + '/', t.open, true);
+    if (w.also) link(BASE + w.also.repo + '/', t.also(lang === 'en' && lw.also ? lw.also : w.also.label));
+    link(GH + w.repo, t.code);
+    document.body.classList.add('open');
+    $('sheet').setAttribute('aria-hidden', 'false');
+    setTimeout(function () { a.firstChild.focus(); }, 60);
+  }
+  function closeSheet() {
+    if (!document.body.classList.contains('open')) return;
+    document.body.classList.remove('open');
+    $('sheet').setAttribute('aria-hidden', 'true');
+    if (lastFocus) lastFocus.focus();
+  }
+  $('sClose').onclick = closeSheet;
+  $('sheetBg').onclick = closeSheet;
+  // 아래 서랍은 아래로 쓸어내려 닫기
+  var ty = 0;
+  $('sheet').addEventListener('touchstart', function (e) { ty = e.touches[0].clientY; }, { passive: true });
+  $('sheet').addEventListener('touchend', function (e) { if (e.changedTouches[0].clientY - ty > 70) closeSheet(); }, { passive: true });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') return closeSheet();
+    if (document.body.classList.contains('open')) return;
+    if (e.key === 'ArrowRight') go(1);
+    else if (e.key === 'ArrowLeft') go(-1);
+    else if (e.key === 'ArrowDown' && cur < SH.length - 1 && document.activeElement.className === 'band') { e.preventDefault(); choose(cur + 1); bands.children[cur].focus(); }
+    else if (e.key === 'ArrowUp' && cur > 0 && document.activeElement.className === 'band') { e.preventDefault(); choose(cur - 1); bands.children[cur].focus(); }
+  });
+
+  var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(layout, 80); });
+  var start = 0, hash = location.hash.slice(1);
+  SH.forEach(function (s, i) { if (s.id === hash) start = i; });
+  applyLang();
+  choose(start);
+  if (document.fonts) document.fonts.ready.then(layout);
+})();
+</script>
+</body>
+</html>
