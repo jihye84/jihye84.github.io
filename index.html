@@ -322,7 +322,7 @@ a { color: inherit; }
     <nav class="bands" id="bands" aria-label="작품 분야"></nav>
     <footer>
       <span id="total"></span>
-      <a href="https://github.com/jihye84" id="ghLink">깃헙에서 보기</a>
+      <a href="https://github.com/jihye84" id="ghLink" target="_blank" rel="noopener">깃헙에서 보기</a>
     </footer>
   </aside>
 
@@ -532,6 +532,7 @@ a { color: inherit; }
     var a = $('sActs'); a.innerHTML = '';
     function link(href, text, main) {
       var l = document.createElement('a'); l.href = href; l.className = 'btn' + (main ? ' main' : '');
+      l.target = '_blank'; l.rel = 'noopener';   // 작업실은 그대로 두고 작품은 새 창(새 탭)으로
       l.textContent = text; a.appendChild(l);
     }
     link(BASE + w.repo + '/', t.open, true);
