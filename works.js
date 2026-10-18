@@ -193,7 +193,7 @@ window.SHELVES = [
         en: {"title": "Solvay 1927", "line": "Find the faces in the famous photograph of 29 physicists", "body": "Zoom and pan across the photograph of the 1927 Fifth Solvay Conference, where Einstein, Curie and Bohr sat together. Hover over a face for a name, tap for that person’s story, or play the game and find the physicist in question.", "tags": ["History of science", "Photograph"]},
         body: '아인슈타인, 퀴리, 보어가 함께 앉은 1927년 제5차 솔베이 회의 사진을 확대하고 움직이며 살펴봅니다. 얼굴에 손을 올리면 이름이, 누르면 그 사람의 이야기가 나오고, 게임 모드에서는 문제로 나온 인물을 사진에서 찾아요.',
         tags: ['과학사', '사진'] },
-      { repo: 'athens', title: '아테네 학당', line: '라파엘로 벽화 속 고대 철학자 58명 찾기',
+      { repo: 'Athens', title: '아테네 학당', line: '라파엘로 벽화 속 고대 철학자 58명 찾기',
         en: {"title": "The School of Athens", "line": "Find 58 ancient thinkers in Raphael’s fresco", "body": "The ancient-philosophy companion to Solvay 1927. Explore Raphael’s fresco The School of Athens (1509–1511): hover over a face for a name, tap for that figure’s story and a spoken introduction. In game mode, find ten randomly chosen thinkers in the painting, then retry the ones you missed. Uncertain identifications are marked and the competing views are explained.", "tags": ["Philosophy", "Art history"]},
         body: '「1927 솔베이 회의」의 고대 철학 버전입니다. 라파엘로의 벽화 「아테네 학당」(1509–1511)을 살펴보며 얼굴에 손을 올리면 이름이, 누르면 그 학자의 이야기와 음성 설명이 나와요. 게임 모드에서는 무작위로 나오는 10명을 그림에서 찾고, 틀린 문제만 다시 풀 수 있습니다. 정체가 엇갈리는 인물은 (추정)으로 표시하고 다른 학설도 적어 두었어요.',
         tags: ['철학', '미술사'] },
