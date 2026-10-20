@@ -122,6 +122,10 @@ window.SHELVES = [
         en: {"title": "Land of Plus and Minus", "line": "Look at a picture and say the equation", "body": "Look at a scene and say an addition sentence for how many there are altogether, or a subtraction sentence for what was taken away or compared. Separate lands for addition, take-away, comparison, and a mix of all three.", "tags": ["Smart board", "Equations"]},
         body: '그림 장면을 보고 모두 몇 개인지 덧셈식을, 덜어 낸 것과 비교한 것을 보고 뺄셈식을 말해 봅니다. 덧셈 나라, 덜어내기 뺄셈 나라, 비교하기 뺄셈 나라, 모두 섞인 나라로 나뉘어 있어요.',
         tags: ['전자칠판', '식 세우기'] },
+      { repo: 'clock', title: '우리 반 모형 시계', line: '시침과 분침을 손으로 돌려 보는 아날로그 시계',
+        en: {"title": "Our Class Clock", "line": "An analogue clock whose hands you turn by hand", "body": "Grab the hour or minute hand and turn it either way. Move the hour hand one number and the minute hand sweeps a full turn, just like a real clock. Show or hide the time box (\"7:18\"), the five-minute numbers around the rim and the second hand, or switch to the current time.", "tags": ["Smart board", "Telling time"]},
+        body: '시침이나 분침을 잡고 시계 방향, 반대 방향으로 돌려 봅니다. 시침을 숫자 한 칸 돌리면 분침이 한 바퀴 돌아 실제 시계처럼 함께 움직여요. "7시 18분"처럼 알려 주는 시각 상자, 바깥의 5분 단위 숫자, 초침을 켜고 끌 수 있고, 현재 시각 모드도 있어요.',
+        tags: ['전자칠판', '시계 보기'] },
     ],
   },
   {
