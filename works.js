@@ -98,8 +98,8 @@ window.SHELVES = [
     id: 'math',
     name: '1학년 수학',
     color: '#3e8a5a',
-    intro: '수를 세지 않고 한눈에 알아보는 힘, 수를 가르고 모으는 감각을 기르려고 만든 수업 도구예요. 교실 TV에서 멀리서도 잘 보이게 크게 그렸습니다.',
-    en: {"name": "First-grade Math", "intro": "Classroom tools for seeing a number at a glance instead of counting, and for feeling how numbers split and combine. Drawn large enough to read from the back of the room."},
+    intro: '수를 세지 않고 한눈에 알아보는 힘, 수를 가르고 모으는 감각, 시계 바늘을 돌리며 시각을 읽는 힘을 기르려고 만든 수업 도구예요. 교실 TV에서 멀리서도 잘 보이게 크게 그렸습니다.',
+    en: {"name": "First-grade Math", "intro": "Classroom tools for seeing a number at a glance instead of counting, feeling how numbers split and combine, and learning to tell the time by turning a clock’s hands. Drawn large enough to read from the back of the room."},
     works: [
       { repo: 'QuickNumbers', title: 'Quick Numbers', line: '아주 잠깐 보여 주고 몇인지 알아맞히기',
         en: {"title": "Quick Numbers", "line": "A glimpse, then guess how many", "body": "Flash number rods, Go stones, ten-frames or linking cubes for as little as 0.05 seconds and guess the number. It builds the habit of seeing groups instead of counting one by one. The standard version covers 11–50, with a separate 50–100 version.", "tags": ["Smart board", "Number sense"], "also": "50–100 version"},
