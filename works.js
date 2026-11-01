@@ -157,8 +157,8 @@ window.SHELVES = [
     id: 'study',
     name: '배움의 서재',
     color: '#3a8d8a',
-    intro: '어른의 공부를 위해 만든 것들이에요. 일본어와 한자, 영어 단어, 고대 이집트 문자와 고려의 왕들, 중국의 시인들, 물리학의 역사와 아테네 학당의 철학자들까지, 궁금했던 것을 퀴즈와 퍼즐로 익힙니다.',
-    en: {"name": "The Study", "intro": "Made for grown-up learning: Japanese and Hanja, English vocabulary, Egyptian hieroglyphs, the kings of Goryeo, the poets of China, the history of physics and the philosophers of the School of Athens, each turned into a quiz or a puzzle."},
+    intro: '어른의 공부를 위해 만든 것들이에요. 일본어와 한자, 영어 단어, 고대 이집트 문자와 고려의 왕들, 중국의 시인들, 물리학의 역사와 아테네 학당의 철학자들, 생활 속 매듭까지, 궁금했던 것을 퀴즈와 퍼즐, 애니메이션으로 익힙니다.',
+    en: {"name": "The Study", "intro": "Made for grown-up learning: Japanese and Hanja, English vocabulary, Egyptian hieroglyphs, the kings of Goryeo, the poets of China, the history of physics, the philosophers of the School of Athens and everyday knots, each turned into a quiz, a puzzle or an animation."},
     works: [
       { repo: 'J4K', title: '일본어 공부방', line: '한국인을 위한 가타카나·한자·지명·성씨 퀴즈',
         en: {"title": "Japanese Study Room", "line": "Katakana, kanji, place names and surnames for Korean learners", "body": "Katakana practice and search, kanji reading with a hard mode, and readings of Japanese city names and family names — quizzes for Korean speakers learning Japanese, gathered in one place.", "tags": ["Japanese"]},
@@ -213,6 +213,10 @@ window.SHELVES = [
         en: {"title": "The School of Athens", "line": "Find 58 ancient thinkers in Raphael’s fresco", "body": "The ancient-philosophy companion to Solvay 1927. Explore Raphael’s fresco The School of Athens (1509–1511): hover over a face for a name, tap for that figure’s story and a spoken introduction. In game mode, find ten randomly chosen thinkers in the painting, then retry the ones you missed. Uncertain identifications are marked and the competing views are explained.", "tags": ["Philosophy", "Art history"]},
         body: '「1927 솔베이 회의」의 고대 철학 버전입니다. 라파엘로의 벽화 「아테네 학당」(1509–1511)을 살펴보며 얼굴에 손을 올리면 이름이, 누르면 그 학자의 이야기와 음성 설명이 나와요. 게임 모드에서는 무작위로 나오는 10명을 그림에서 찾고, 틀린 문제만 다시 풀 수 있습니다. 정체가 엇갈리는 인물은 (추정)으로 표시하고 다른 학설도 적어 두었어요.',
         tags: ['철학', '미술사'] },
+      { repo: 'knots', title: '매듭 교실', line: '생존·탈출·생활 매듭 10가지를 한 단계씩 따라 묶기',
+        en: {"title": "Knot Classroom", "line": "Ten survival, rescue and everyday knots, one step at a time", "body": "From the overhand knot to the bowline and the taut-line hitch, ten useful knots sorted by purpose and difficulty. The rope is painted in a gradient from its standing part (blue) to its working end (red), so you can always tell which part goes over and which goes under. Step through the knot one move at a time or watch it play straight through, then pull both ends to see the knot cinch tight — a tightening worked out by a rope simulation.", "tags": ["Animation", "Survival skills"]},
+        body: '옭매듭부터 보라인, 타우트라인 히치까지 쓸모 있는 매듭 10가지를 쓰임새와 난이도별로 모았습니다. 줄을 고정된 쪽(파랑)에서 끝(빨강)까지 그라데이션으로 칠해 어느 부분이 위로, 어느 부분이 밑으로 지나가는지 한눈에 보여요. 한 단계씩 넘겨 보거나 죽 이어 보고, 마지막에는 양쪽을 당겨 매듭이 조여지는 모습까지 볼 수 있습니다. 조여지는 모습은 줄을 실제로 당겨 보는 물리 계산으로 만들었어요.',
+        tags: ['애니메이션', '생존 기술'] },
     ],
   },
 ];
