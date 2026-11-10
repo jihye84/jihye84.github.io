@@ -104,6 +104,10 @@ window.SHELVES = [
         en: {"title": "Double Batchim Playground", "line": "Fit double final consonants into words from picture clues", "body": "Look at a picture and a sentence clue, then drag consonant cards into place to complete a word with a double final consonant. Each round of ten covers all eight double finals; when you get it right, the split boxes merge into one syllable and the spoken pronunciation is shown too.", "tags": ["Smart board", "Batchim"]},
         body: '그림 장면과 문장 힌트를 보고 자음 카드를 끌어다 받침 자리에 놓아 겹받침 낱말을 완성합니다. 한 회 10문제에 겹받침 8종이 모두 나오고, 정답이면 나뉘어 있던 칸이 한 글자로 합쳐지며 [밥따]처럼 소리 나는 대로도 보여 줘요.',
         tags: ['전자칠판', '받침'] },
+      { repo: 'wongoji', title: '원고지 칠판', line: '글을 입력하면 원고지 규칙대로 칸이 채워지는 칠판',
+        en: {"title": "Manuscript Paper Board", "line": "Type a passage and it fills the squares by the rules of Korean manuscript paper", "body": "A chalkboard-style sheet of Korean manuscript paper (wongoji) for teaching how to write in squares. Type in the teacher’s box and every rule is applied for you: a V mark in the margin when a space would start a line, punctuation that would start a line placed outside the last square, two digits or lowercase letters per square, and quotation marks set in the right corner. Tap any square to fix that character, watch the sample passage write itself one character at a time, and print with faded letters for tracing practice.", "tags": ["Smart board", "Writing", "Printable"]},
+        body: '원고지 쓰는 법을 가르치는 칠판입니다. 선생님 입력창에 글을 쓰면 줄 끝 띄어쓰기는 칸 밖 V표로, 줄 첫머리에 올 문장 부호는 앞줄 칸 밖으로, 숫자와 영어 소문자는 한 칸에 두 자씩, 따옴표는 칸의 제자리에 저절로 들어갑니다. 칸을 눌러 바로 고치고, 예문이 한 글자씩 써지는 모습을 함께 보고, 글씨를 흐리게 인쇄해 따라 쓰기 학습지로도 쓸 수 있어요.',
+        tags: ['전자칠판', '원고지', '인쇄'] },
     ],
   },
   {
